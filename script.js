@@ -56,8 +56,35 @@ select.onchange = () => {
     animate();
 };
 document.body.appendChild(select);
-
 select.value = values[0];
+
+// Add a menu to show controls
+let menu = document.createElement('div');
+menu.id = 'menu';
+menu.innerHTML = `
+    <div id="menu-content">
+        <h1>Controls</h1>
+        <p>WASD or Arrows: Move the object</p>
+        <p>EQ: Move the object up and down</p>
+        <p>KLNM: Rotate the object</p>
+        <p>ZX: Scale the object</p>
+        <p>Click: Select an object</p>
+    </div>
+`;
+document.body.appendChild(menu);
+// Toggle menu on/off with a button
+let menuButton = document.createElement('button');
+menuButton.id = 'menu-button';
+menuButton.innerHTML = 'Menu';
+menuButton.onclick = () => {
+    if (menu.style.display === 'none') {
+        menu.style.display = 'block';
+    } else {
+        menu.style.display = 'none';
+    }
+}
+document.body.appendChild(menuButton);
+
 init(select.value);
 
 function init(source) {
@@ -189,67 +216,67 @@ function render() {
 
 function controlObjectKeys() {
     if (!keyPressed) return;
-    // Move the object forward
-    if (keyPressed === "W") {
+    // Move the object forward (w, W or up arrow)
+    if (keyPressed === "W" || keyPressed === "w" || keyPressed === "ArrowUp") {
         model.position.z -= 0.1;
         keyPressed = null;
     }
     // Move the object backward
-    if (keyPressed === "S") {
+    if (keyPressed === "S" || keyPressed === "s" || keyPressed === "ArrowDown") {
         model.position.z += 0.1;
         keyPressed = null;
     }
     // Move the object to the left
-    if (keyPressed === "A") {
-        model.position.x -= 0.1;
-        keyPressed = null;
-    }
-    // Move the object to the right
-    if (keyPressed === "D") {
+    if (keyPressed === "A" || keyPressed === "a" || keyPressed === "ArrowLeft") {
         model.position.x += 0.1;
         keyPressed = null;
     }
+    // Move the object to the right
+    if (keyPressed === "D" || keyPressed === "d" || keyPressed === "ArrowRight") {
+        model.position.x -= 0.1;
+        keyPressed = null;
+    }
     // Move the object up
-    if (keyPressed === "E") {
+    if (keyPressed === "E" || keyPressed === "e") {
         model.position.y += 0.1;
         keyPressed = null;
     }
     // Move the object down
-    if (keyPressed === "Q") {
+    if (keyPressed === "Q" || keyPressed === "q") {
         model.position.y -= 0.1;
         keyPressed = null;
     }
 
     // Rotate the object to the left
-    if (keyPressed === "K") {
+    if (keyPressed === "K" || keyPressed === "k") {
         model.rotation.y -= 0.1;
         keyPressed = null;
     }
     // Rotate the object to the right
-    if (keyPressed === "L") {
+    if (keyPressed === "L" || keyPressed === "l") {
         model.rotation.y += 0.1;
         keyPressed = null;
     }
     // Rotate the object up
-    if (keyPressed === "N") {
+    if (keyPressed === "N" || keyPressed === "n") {
         model.rotation.x -= 0.1;
         keyPressed = null;
     }
     // Rotate the object down
-    if (keyPressed === "M") {
+    if (keyPressed === "M" || keyPressed === "m") {
         model.rotation.x += 0.1;
         keyPressed = null;
     }
 
     // Scale the object up
-    if (keyPressed === "Z") {
+    if (keyPressed === "Z" || keyPressed === "z") {
         model.scale.x += 0.1;
         model.scale.y += 0.1;
         model.scale.z += 0.1;
         keyPressed = null;
     }
     // Scale the object down
-    if (keyPressed === "X") {
+    if (keyPressed === "X" || keyPressed === "x") {
         model.scale.x -= 0.1;
         model.scale.y -= 0.1;
         model.scale.z -= 0.1;
