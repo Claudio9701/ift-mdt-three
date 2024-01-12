@@ -75,15 +75,39 @@ document.body.appendChild(menu);
 // Toggle menu on/off with a button
 let menuButton = document.createElement('button');
 menuButton.id = 'menu-button';
-menuButton.innerHTML = 'Menu';
+menuButton.innerHTML = 'x';
+// Add an event listener to the button
 menuButton.onclick = () => {
     if (menu.style.display === 'none') {
         menu.style.display = 'block';
+        menuButton.innerHTML = 'x';
     } else {
         menu.style.display = 'none';
+        menuButton.innerHTML = 'o';
     }
 }
 document.body.appendChild(menuButton);
+
+// Create a progress bar
+let progress = document.createElement('div');
+progress.id = 'progress';
+let progressBar = document.createElement('div');
+progressBar.id = 'progress-bar';
+// Add the progress bar to the page
+progress.appendChild(progressBar);
+document.body.appendChild(progress);
+
+var manager = new THREE.LoadingManager();
+manager.onProgress = function (item, loaded, total) {
+    console.log("Percent loaded: " + Math.round(loaded / total * 100) + " %");
+    progressBar.style.width = (loaded / total * 100) + '%';
+    if (loaded / total * 100 === 100) {
+        // wait 1 second before hiding the progress bar
+        setTimeout(() => {
+            progress.style.display = 'none';
+        }, 1000);
+    }
+};
 
 init(select.value);
 
@@ -103,7 +127,7 @@ function init(source) {
         loadingAnimationEnabled: true,
         onBeforeRender: () => {
             uniformTime.value = performance.now() / 100;
-        }
+        },
     });
 
     splats.onLoad = () => {
@@ -127,7 +151,7 @@ function init(source) {
     };
 
     // load glb
-    let loader = new GLTFLoader();
+    let loader = new GLTFLoader(manager);
     loader.load('models/gltf/a2301035b201_model.glb', (gltf) => {
         model = gltf.scene;
         model.position.y = 0.5;
